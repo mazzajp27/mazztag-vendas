@@ -107,26 +107,10 @@ const benefits = [
   { title: "Acesso vitalício", text: "Aprenda no seu ritmo e consulte quando precisar." },
 ];
 
-const plans = [
-  {
-    name: "Loja",
-    slug: "loja" as const,
-    price: 35,
-    fullPrice: 47,
-    description: "Para quem quer começar comprando e gerenciando suas placas.",
-    items: ["Acesso à loja de placas", "Sistema de gestão", "Ativação das placas"],
-    featured: false,
-  },
-  {
-    name: "Completo",
-    slug: "completo" as const,
-    price: 50,
-    fullPrice: 87,
-    description: "A estrutura completa para aprender, vender e crescer com suporte.",
-    items: ["Tudo do plano Loja", "Treinamento completo", "Acesso à comunidade"],
-    featured: true,
-  },
-];
+// Acesso à loja é grátis (cadastro direto, sem checkout) — só o upgrade pra
+// Comunidade + Aulas + Suporte é pago.
+const upgradePrice = 30;
+const upgradeFullPrice = 60;
 
 // Oferta de lançamento. Para prorrogar, altere apenas esta data (horário de Brasília, UTC-3).
 const LAUNCH_OFFER_DEADLINE = new Date("2026-09-30T23:59:59.999-03:00").getTime();
@@ -552,15 +536,6 @@ function Faq() {
   );
 }
 
-function PlanCheckoutButton({ plan, featured }: { plan: "loja" | "completo"; featured: boolean }) {
-  return (
-    <div className="mt-auto">
-      <Button asChild size="lg" variant={featured ? "default" : "outline"} className={`h-12 w-full text-base ${featured ? "bg-brand-blue text-primary-foreground hover:bg-brand-blue/90" : "border-foreground"}`}>
-        <a href={`${APP_URL}/comprar/${plan}`}>Escolher {plan === "loja" ? "Loja" : "Completo"} <ArrowRight /></a>
-      </Button>
-    </div>
-  );
-}
 
 function App() {
   const [offerExpired, setOfferExpired] = useState<boolean | null>(null);
@@ -703,9 +678,9 @@ function App() {
       <section id="planos" className="scroll-mt-10 py-20 md:py-28" aria-labelledby="planos-title">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
           <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="text-sm font-bold uppercase text-brand-blue">Escolha como começar</p>
+            <p className="text-sm font-bold uppercase text-brand-blue">Comece grátis</p>
             <h2 id="planos-title" className="mt-4 font-display text-4xl font-bold md:text-5xl">Seu próximo passo começa aqui</h2>
-            <p className="mt-5 text-muted-foreground">Acesse a estrutura MazzTag e compre suas placas dentro da loja exclusiva.</p>
+            <p className="mt-5 text-muted-foreground">Crie sua conta grátis e comece a comprar placas na loja exclusiva agora mesmo.</p>
           </div>
           <LaunchOffer />
           <div className="mx-auto mb-6 flex max-w-4xl items-start gap-3 rounded-lg border border-border bg-secondary px-5 py-4">
@@ -715,30 +690,55 @@ function App() {
             </p>
           </div>
           <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
-            {plans.map((plan) => (
-              <article key={plan.name} className={`relative flex flex-col rounded-lg border p-7 md:p-9 ${plan.featured ? "border-brand-blue bg-ink text-ink-foreground shadow-deep" : "border-border bg-card"}`}>
-                {plan.featured && <span className="absolute right-5 top-5 rounded-full bg-google-blue px-3 py-1 text-xs font-bold uppercase text-primary-foreground">Mais completo</span>}
-                <p className={`text-sm font-bold uppercase ${plan.featured ? "text-google-blue" : "text-brand-blue"}`}>Plano {plan.name}</p>
-                <div className="mt-5 min-h-20">
-                  {offerExpired !== true && (
-                    <div className="mb-1 flex items-center gap-2">
-                      <span className={`text-sm line-through ${plan.featured ? "text-ink-muted" : "text-muted-foreground"}`}>De R$ {plan.fullPrice}</span>
-                      <span className="rounded-md bg-google-blue px-2 py-1 text-[10px] font-bold uppercase text-primary-foreground">Preço de lançamento</span>
-                    </div>
-                  )}
-                  <div className="flex items-end gap-2">
-                    <span className="mb-2 text-lg">R$</span>
-                    <strong className="font-display text-6xl">{offerExpired === true ? plan.fullPrice : plan.price}</strong>
-                    <span className={`mb-2 text-sm ${plan.featured ? "text-ink-muted" : "text-muted-foreground"}`}>acesso único</span>
-                  </div>
+            <article className="relative flex flex-col rounded-lg border border-border bg-card p-7 md:p-9">
+              <p className="text-sm font-bold uppercase text-brand-blue">Loja MazzTag</p>
+              <div className="mt-5 min-h-20">
+                <div className="flex items-end gap-2">
+                  <strong className="font-display text-6xl">Grátis</strong>
                 </div>
-                <p className={`mt-5 min-h-12 leading-relaxed ${plan.featured ? "text-ink-muted" : "text-muted-foreground"}`}>{plan.description}</p>
-                <ul className="my-8 space-y-3">
-                  {plan.items.map((item) => <li key={item} className="flex items-center gap-3 text-sm"><Check className="size-5 text-google-blue" /> {item}</li>)}
-                </ul>
-                <PlanCheckoutButton plan={plan.slug} featured={plan.featured} />
-              </article>
-            ))}
+                <p className="mt-2 text-sm text-muted-foreground">Sem custo, sem cartão de crédito.</p>
+              </div>
+              <p className="mt-5 min-h-12 leading-relaxed text-muted-foreground">Cadastre-se e comece a comprar placas agora mesmo, sem pagar nada.</p>
+              <ul className="my-8 space-y-3">
+                {["Acesso à loja de placas", "Sistema de gestão", "Ativação das placas"].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm"><Check className="size-5 text-google-blue" /> {item}</li>
+                ))}
+              </ul>
+              <div className="mt-auto">
+                <Button asChild size="lg" variant="outline" className="h-12 w-full border-foreground text-base">
+                  <a href={`${APP_URL}/cadastro`}>Cadastre-se grátis <ArrowRight /></a>
+                </Button>
+              </div>
+            </article>
+
+            <article className="relative flex flex-col rounded-lg border border-brand-blue bg-ink p-7 text-ink-foreground shadow-deep md:p-9">
+              <span className="absolute right-5 top-5 rounded-full bg-google-blue px-3 py-1 text-xs font-bold uppercase text-primary-foreground">Recomendado</span>
+              <p className="text-sm font-bold uppercase text-google-blue">Comunidade + Aulas + Suporte</p>
+              <div className="mt-5 min-h-20">
+                {offerExpired !== true && (
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="text-sm text-ink-muted line-through">De R$ {upgradeFullPrice}</span>
+                    <span className="rounded-md bg-google-blue px-2 py-1 text-[10px] font-bold uppercase text-primary-foreground">Preço de lançamento</span>
+                  </div>
+                )}
+                <div className="flex items-end gap-2">
+                  <span className="mb-2 text-lg">R$</span>
+                  <strong className="font-display text-6xl">{offerExpired === true ? upgradeFullPrice : upgradePrice}</strong>
+                  <span className="mb-2 text-sm text-ink-muted">acesso único</span>
+                </div>
+              </div>
+              <p className="mt-5 min-h-12 leading-relaxed text-ink-muted">Desbloqueie a comunidade, o treinamento completo e suporte direto com a gente.</p>
+              <ul className="my-8 space-y-3">
+                {["Comunidade exclusiva de parceiros", "Treinamento completo", "Suporte direto"].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm"><Check className="size-5 text-google-blue" /> {item}</li>
+                ))}
+              </ul>
+              <div className="mt-auto">
+                <Button asChild size="lg" className="h-12 w-full bg-brand-blue text-base text-primary-foreground hover:bg-brand-blue/90">
+                  <a href={`${APP_URL}/comprar/completo`}>Desbloquear agora <ArrowRight /></a>
+                </Button>
+              </div>
+            </article>
           </div>
           <div className="mx-auto mt-8 flex max-w-4xl items-start gap-3 rounded-lg border border-border bg-secondary px-5 py-4">
             <Smartphone className="mt-0.5 size-5 shrink-0 text-google-blue" />
