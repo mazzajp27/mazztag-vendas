@@ -17,6 +17,7 @@ import {
   Bandage,
   Clock3,
   Image,
+  Lock,
   Mail,
   Maximize,
   MessageCircle,
@@ -109,8 +110,12 @@ const benefits = [
 
 // Acesso à loja é grátis (cadastro direto, sem checkout) — só o upgrade pra
 // Comunidade + Aulas + Suporte é pago.
-const upgradePrice = 30;
+const upgradePrice = 9.9;
 const upgradeFullPrice = 60;
+
+// Upgrade temporariamente bloqueado ("Em breve"). Pra liberar de novo, é só
+// virar pra false — preço e checkout já ficam prontos.
+const UPGRADE_LOCKED = true;
 
 // Oferta de lançamento. Para prorrogar, altere apenas esta data (horário de Brasília, UTC-3).
 const LAUNCH_OFFER_DEADLINE = new Date("2026-09-30T23:59:59.999-03:00").getTime();
@@ -673,7 +678,7 @@ function App() {
         </div>
       </section>
 
-      <SocialProof />
+      {/* Temporariamente removida — <SocialProof /> */}
 
       <section id="planos" className="scroll-mt-10 py-20 md:py-28" aria-labelledby="planos-title">
         <div className="mx-auto max-w-5xl px-5 lg:px-8">
@@ -682,7 +687,7 @@ function App() {
             <h2 id="planos-title" className="mt-4 font-display text-4xl font-bold md:text-5xl">Seu próximo passo começa aqui</h2>
             <p className="mt-5 text-muted-foreground">Crie sua conta grátis e comece a comprar placas na loja exclusiva agora mesmo.</p>
           </div>
-          <LaunchOffer />
+          {!UPGRADE_LOCKED && <LaunchOffer />}
           <div className="mx-auto mb-6 flex max-w-4xl items-start gap-3 rounded-lg border border-border bg-secondary px-5 py-4">
             <ShieldCheck className="mt-0.5 size-5 shrink-0 text-brand-blue" />
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -712,20 +717,33 @@ function App() {
             </article>
 
             <article className="relative flex flex-col rounded-lg border border-brand-blue bg-ink p-7 text-ink-foreground shadow-deep md:p-9">
-              <span className="absolute right-5 top-5 rounded-full bg-google-blue px-3 py-1 text-xs font-bold uppercase text-primary-foreground">Recomendado</span>
+              {!UPGRADE_LOCKED && (
+                <span className="absolute right-5 top-5 rounded-full bg-google-blue px-3 py-1 text-xs font-bold uppercase text-primary-foreground">Recomendado</span>
+              )}
               <p className="text-sm font-bold uppercase text-google-blue">Comunidade + Aulas + Suporte</p>
               <div className="mt-5 min-h-20">
-                {offerExpired !== true && (
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="text-sm text-ink-muted line-through">De R$ {upgradeFullPrice}</span>
-                    <span className="rounded-md bg-google-blue px-2 py-1 text-[10px] font-bold uppercase text-primary-foreground">Preço de lançamento</span>
+                {UPGRADE_LOCKED ? (
+                  <div className="flex items-center gap-2">
+                    <Lock className="size-8 text-ink-muted" />
+                    <strong className="font-display text-4xl">Em breve</strong>
                   </div>
+                ) : (
+                  <>
+                    {offerExpired !== true && (
+                      <div className="mb-1 flex items-center gap-2">
+                        <span className="text-sm text-ink-muted line-through">De R$ {upgradeFullPrice}</span>
+                        <span className="rounded-md bg-google-blue px-2 py-1 text-[10px] font-bold uppercase text-primary-foreground">Preço de lançamento</span>
+                      </div>
+                    )}
+                    <div className="flex items-end gap-2">
+                      <span className="mb-2 text-lg">R$</span>
+                      <strong className="font-display text-6xl">
+                        {(offerExpired === true ? upgradeFullPrice : upgradePrice).toFixed(2).replace(".", ",")}
+                      </strong>
+                      <span className="mb-2 text-sm text-ink-muted">acesso único</span>
+                    </div>
+                  </>
                 )}
-                <div className="flex items-end gap-2">
-                  <span className="mb-2 text-lg">R$</span>
-                  <strong className="font-display text-6xl">{offerExpired === true ? upgradeFullPrice : upgradePrice}</strong>
-                  <span className="mb-2 text-sm text-ink-muted">acesso único</span>
-                </div>
               </div>
               <p className="mt-5 min-h-12 leading-relaxed text-ink-muted">Desbloqueie a comunidade, o treinamento completo e suporte direto com a gente.</p>
               <ul className="my-8 space-y-3">
@@ -734,9 +752,15 @@ function App() {
                 ))}
               </ul>
               <div className="mt-auto">
-                <Button asChild size="lg" className="h-12 w-full bg-brand-blue text-base text-primary-foreground hover:bg-brand-blue/90">
-                  <a href={`${APP_URL}/comprar/completo`}>Desbloquear agora <ArrowRight /></a>
-                </Button>
+                {UPGRADE_LOCKED ? (
+                  <Button size="lg" disabled className="h-12 w-full bg-brand-blue text-base text-primary-foreground opacity-50">
+                    <Lock /> Em breve
+                  </Button>
+                ) : (
+                  <Button asChild size="lg" className="h-12 w-full bg-brand-blue text-base text-primary-foreground hover:bg-brand-blue/90">
+                    <a href={`${APP_URL}/comprar/completo`}>Desbloquear agora <ArrowRight /></a>
+                  </Button>
+                )}
               </div>
             </article>
           </div>
