@@ -42,8 +42,8 @@ const APP_URL = "https://app.mazztag.com.br";
 
 const wholesalePrices = [
   { min: 50, label: "50 ou mais", price: 17 },
-  { min: 2, label: "2 a 49 unidades", price: 20 },
-  { min: 1, label: "1 unidade", price: 23 },
+  { min: 21, label: "21 a 49 unidades", price: 18 },
+  { min: 1, label: "1 a 20 unidades", price: 20 },
 ];
 
 const trustBadges = [
