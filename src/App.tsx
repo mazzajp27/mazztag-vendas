@@ -75,7 +75,7 @@ const faqItems = [
   {
     question: "Preciso entender de tecnologia?",
     answer:
-      "Não. O sistema é intuitivo e as placas já vêm configuradas: basta cadastrar o link do Google da empresa do seu cliente e a placa passa a funcionar. Quem sabe usar o WhatsApp consegue operar a MazzTag sem dificuldade.",
+      "Não. O QR Code já funciona direto, sem nenhuma configuração — você só cadastra o link de destino (a avaliação do Google da empresa do seu cliente) normalmente no sistema. Já o chip NFC precisa ser configurado manualmente por você, mas é rápido: temos uma aula gratuita que ensina o passo a passo. Quem sabe usar o WhatsApp consegue operar a MazzTag sem dificuldade.",
   },
   {
     question: "Preciso ter experiência com vendas?",
