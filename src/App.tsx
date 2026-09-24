@@ -15,21 +15,16 @@ import {
   Sparkles,
   Star,
   Bandage,
-  Clock3,
   Image,
   Lock,
   Mail,
-  Maximize,
   MessageCircle,
   Settings2,
   ShoppingBag,
-  SkipForward,
   Store,
-  Volume2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import placasMazzTagImage from "@/assets/placas-mazztag-azul-preta-10x10.png";
 import {
   Accordion,
   AccordionContent,
@@ -568,31 +563,21 @@ function App() {
       <section id="topo" className="relative bg-hero pt-20 text-hero-foreground">
         <div className="mx-auto max-w-6xl px-5 py-12 lg:px-8 lg:py-16">
           <p className="mb-5 text-xs font-bold uppercase text-google-blue">Operação real · Conheça o produto</p>
-          <div className="relative overflow-hidden rounded-lg border border-hero-line bg-ink shadow-product" aria-label="Player do vídeo de apresentação da MazzTag">
-            <img src={placasMazzTagImage} width={1536} height={1024} alt="Placas MazzTag azul e preta" className="aspect-video w-full object-cover opacity-45" />
-            <div className="absolute inset-0 bg-ink/35" />
-            <div className="absolute inset-x-0 top-[34%] flex -translate-y-1/2 justify-center md:inset-0 md:grid md:translate-y-0 md:place-items-center">
-              <Button type="button" size="icon" disabled aria-label="Vídeo aguardando envio" className="size-16 rounded-full bg-google-blue text-primary-foreground opacity-100 shadow-deep disabled:opacity-100 md:size-20">
-                <Play className="ml-1 size-7 fill-current md:size-8" />
-              </Button>
+          <div className="relative overflow-hidden rounded-lg border border-hero-line bg-ink shadow-product">
+            <div className="aspect-video w-full">
+              <iframe
+                className="size-full"
+                src="https://www.youtube.com/embed/oiT2-H-IAwI"
+                title="Vídeo de apresentação da MazzTag"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
-            <div className="absolute left-4 top-4 flex items-center gap-2 rounded-md border border-hero-line bg-hero/90 px-3 py-2 shadow-deep md:left-5 md:top-5">
-              <QrCode className="size-4 text-google-blue" />
-              <span className="text-xs font-bold">2 cores · 1 tamanho — Azul ou preta · 10x10 cm</span>
-            </div>
-            <div className="absolute inset-x-4 bottom-14 mx-auto max-w-3xl border-l-2 border-google-blue bg-ink/90 px-4 py-3 text-center text-sm font-medium md:bottom-20 md:text-base">
-              “Veja como a MazzTag transforma uma boa experiência em uma avaliação no Google.”
-            </div>
-            <div className="absolute inset-x-0 bottom-0 border-t border-hero-line bg-ink/95 px-3 py-2.5 md:px-5 md:py-3">
-              <div className="mb-2 h-1 overflow-hidden rounded-full bg-ink-soft"><span className="block h-full w-0 bg-google-blue" /></div>
-              <div className="flex items-center gap-2 text-hero-muted">
-                <Button type="button" size="icon" variant="ghost" disabled aria-label="Reproduzir" className="size-8 text-hero-foreground disabled:opacity-60"><Play className="size-4 fill-current" /></Button>
-                <Button type="button" size="icon" variant="ghost" disabled aria-label="Avançar" className="hidden size-8 text-hero-foreground disabled:opacity-60 sm:inline-flex"><SkipForward className="size-4" /></Button>
-                <Button type="button" size="icon" variant="ghost" disabled aria-label="Volume" className="size-8 text-hero-foreground disabled:opacity-60"><Volume2 className="size-4" /></Button>
-                <span className="text-xs tabular-nums">00:00 / --:--</span>
-                <span className="ml-auto hidden items-center gap-1 text-xs sm:flex"><Clock3 className="size-3.5" /> Vídeo aguardando envio</span>
-                <Button type="button" size="icon" variant="ghost" disabled aria-label="Tela cheia" className="size-8 text-hero-foreground disabled:opacity-60"><Maximize className="size-4" /></Button>
-              </div>
+            <div className="flex flex-wrap items-center gap-3 border-t border-hero-line bg-ink/95 px-4 py-3 md:px-5">
+              <span className="flex items-center gap-2 rounded-md border border-hero-line bg-hero/90 px-3 py-2 text-xs font-bold">
+                <QrCode className="size-4 text-google-blue" /> 2 cores · 1 tamanho — Azul ou preta · 10x10 cm
+              </span>
+              <span className="text-sm text-hero-muted">“Veja como a MazzTag transforma uma boa experiência em uma avaliação no Google.”</span>
             </div>
           </div>
 
